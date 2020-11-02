@@ -5,7 +5,7 @@ const mak = require('./mak.json');
 const tivo = new TiVo('https://192.168.1.110/', mak);
 const shows = {};
 tivo.on('data', data=>{
-  console.log(data)
+  console.log(data);
   if (data.title === 'The Good, the Bad and the Ugly') {
     data.downloadMpegTs().on('data', console.log);
   }
