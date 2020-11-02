@@ -7,7 +7,7 @@ const shows = {};
 tivo.on('data', data=>{
   console.log(data)
   if (data.title === 'The Good, the Bad and the Ugly') {
-    data.downloadStream().on('data', console.log);
+    data.downloadMpegTs().on('data', console.log);
   }
 });
 tivo.list();

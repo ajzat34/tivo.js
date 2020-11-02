@@ -58,11 +58,11 @@ class Program {
     this.mpegPS = this.contentUrl + '&Format=video/x-tivo-mpeg';
   }
 
-  downloadStream() {
+  downloadMpegTs() {
     return this.#tivo.stream(this.mpegTS);
   }
 
-  downloadStreamMpegPS() {
+  downloadMpegPS() {
     return this.#tivo.stream(this.mpegPS);
   }
 }
