@@ -1,0 +1,12 @@
+{
+  "name": "tivo.js",
+  "version": "1.0.0",
+  "description": "TiVo Web Access",
+  "main": "index.js",
+  "repository": "https://github.com/ajzat34/tivo.js.git",
+  "author": "Andrew Johnson <ajzat25@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "xml2js": "^0.4.23"
+  }
+}
