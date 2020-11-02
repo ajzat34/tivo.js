@@ -30,7 +30,8 @@ class TiVoRequest extends EventEmitter {
     })
     child.stderr.on('data', data=>stderrdata+=data);
     child.on('close', (code)=>{
-      self.emit('error', new Error('Stderr: ' + stderrdata), code);
+      if (code !== 0) self.emit('error', new Error('Stderr: ' + stderrdata), code);
+      else self.emit('done');
     });
     return child.stdout;
   }
