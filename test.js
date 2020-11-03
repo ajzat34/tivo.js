@@ -1,11 +1,8 @@
-const {TiVo, Bonjour, FFmpegOptions} = require('./index.js');
+const {TiVo, Bonjour} = require('./index.js');
 const {pipeline} = require('stream');
 const fs = require('fs');
 
 const mak = require('./mak.json');
-
-const opt = new FFmpegOptions('out.mkv');
-opt.use(FFmpegOptions.crf(22));
 
 const discovery = new Bonjour(mak);
 discovery.on('update', device=>{
@@ -14,7 +11,7 @@ discovery.on('update', device=>{
 
   tivo.on('data', data=>{
     console.log(data.toString());
-    console.log(tivo.unixDownloadScript(data, opt));
+    console.log(tivo.unixDecode(data));
   });
   tivo.scan();
 })

@@ -4,9 +4,6 @@ var xml2js = require('xml2js');
 
 const TiVoRequest = require('./http.js');
 const TiVoDecoder = require('./tivodecode.js');
-const FFmpeg = require('./ffmpeg.js');
-const FFmpegOptions = FFmpeg.FFmpegOptions;
-
 /**
 * A show/movie recored on the tivo
 */
@@ -115,7 +112,6 @@ class TiVo extends EventEmitter {
     this.name = name;
     this.address = `https://${address}/`;
     this.mak = mediaAccessKey;
-    this.ffmpeg = new FFmpeg(options.ffmpegLocation);
     this.client = new TiVoRequest(mediaAccessKey, options.curlLocation);
     this.decoder = new TiVoDecoder(mediaAccessKey, options.tivodecodeLocation);
     this.parser = new xml2js.Parser();
@@ -123,26 +119,20 @@ class TiVo extends EventEmitter {
 
   /**
   * @param {Program} program
-  * valid args: ['decode', 'play']
+  * @return {string}
   */
-  unixScript(program, ...args) {
+  unixCurl(program) {
     let script = this.client.unixScript();
     script += ` "${program.mpegTS}"`;
-    if (args.includes('decode')) {
-      script += ' | ' + this.decoder.unixScript();
-    }
-    if (args.includes('play')) {
-      script += ' | ffplay -';
-    }
     return script
   }
 
-  unixDownloadScript(program, ffmpegOptions) {
-    let script = this.client.unixScript();
-    script += ` "${program.mpegTS}"`;
-    script += ' | ' + this.decoder.unixScript();
-    script += ' | ' + this.ffmpeg.compile(ffmpegOptions);
-    return script
+  /**
+  * @param {Program} program
+  * @return {string}
+  */
+  unixDecode(program) {
+    return this.unixCurl(program) + ' | ' + this.decoder.unixScript();
   }
 
   /** load a nowplayingXML page */
