@@ -7,6 +7,7 @@
   "author": "Andrew Johnson <ajzat25@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "mdns": "^2.5.1",
     "xml2js": "^0.4.23"
   }
 }

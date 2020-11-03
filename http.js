@@ -21,18 +21,8 @@ class TiVoRequest extends EventEmitter {
     return this.#spawn('-k', '--silent', '--show-error', '--fail', '--digest', '-u', `${this.username}:${this.password}`, url, '-H', 'Cache-Control: max-age=0', '-c', path.resolve(__dirname + 'cookiejar'));
   }
 
-  getStream(url) {
-    const self = this;
-    const child = this.request(url);
-    let stderrdata = '';
-    child.on('error', (err)=>{
-      self.emit('error', err);
-    })
-    child.stderr.on('data', data=>stderrdata+=data);
-    child.on('close', (code)=>{
-      self.emit('error', new Error('Stderr: ' + stderrdata), code);
-    });
-    return child.stdout;
+  unixScript() {
+    return `${this.curl} --digest -u ${this.username}:${this.password} -H Cache-Control: max-age=0 -c ${path.resolve(__dirname + 'cookiejar')}`;
   }
 
   async get(url) {

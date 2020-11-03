@@ -1,17 +1,20 @@
-const {TiVo} = require('./index.js');
+const {TiVo, Bonjour, FFmpegOptions} = require('./index.js');
+const {pipeline} = require('stream');
+const fs = require('fs');
 
 const mak = require('./mak.json');
 
-const tivo = new TiVo('https://192.168.1.110/', mak);
-const shows = {};
-tivo.on('data', data=>{
-  console.log(data)
-  if (data.title === 'The Good, the Bad and the Ugly') {
-    data.downloadStream().on('data', console.log);
-  }
-});
-tivo.list();
+const opt = new FFmpegOptions('out.mkv');
+opt.use(FFmpegOptions.crf(22));
 
-// tivo.on('ready', async ()=>{
-// })
-// console.log(tivo.connect());
+const discovery = new Bonjour(mak);
+discovery.on('update', device=>{
+  console.log(device.toString());
+  const tivo = device.connect();
+
+  tivo.on('data', data=>{
+    console.log(data.toString());
+    console.log(tivo.unixDownloadScript(data, opt));
+  });
+  tivo.scan();
+})
