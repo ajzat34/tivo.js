@@ -1,6 +1,4 @@
 const {TiVo, Bonjour} = require('./index.js');
-const {pipeline} = require('stream');
-const fs = require('fs');
 
 const mak = require('./mak.json');
 

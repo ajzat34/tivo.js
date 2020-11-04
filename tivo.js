@@ -21,6 +21,8 @@ class Program {
   programId;
   seriesServerId;
   programServerId;
+  size;
+  sizeGB;
 
   image;
   contentUrl;
@@ -63,6 +65,9 @@ class Program {
     addDetail('seriesId', 'SeriesServerId', parseInt);
     addDetail('programId', 'ProgramServerId', parseInt);
     addDetail('id', 'IdGuideSource', parseInt);
+    addDetail('size', 'SourceSize', parseInt);
+
+    this.sizeGB = this.size * 1e-9;
 
     this.contentUrl = links.Content[0].Url[0];
     if ('CustomIcon' in links) this.image = links.CustomIcon[0].Url[0]
@@ -84,7 +89,7 @@ class Program {
   toString() {
     let r = `${this.server}: `;
     if (this.episodeTitle) {
-      r += `${this.episodeTitle} (${this.title})`
+      r += `${this.episodeTitle} (${this.title}) ${this.sizeGB.toFixed(2)}GB`
     } else {
       r += `${this.title}`
     }
