@@ -1,6 +1,7 @@
 const EventEmitter = require('events');
 const url = require('url');
 var xml2js = require('xml2js');
+var {XXHash64} = require('xxhash');
 
 const TiVoRequest = require('./http.js');
 const TiVoDecoder = require('./tivodecode.js');
@@ -19,8 +20,12 @@ class Program {
   sourceType;
   seriesId;
   programId;
-  seriesIdString;
-  programIdString;
+  seriesServerId;
+  programServerId;
+  captureDate;
+  showingDuration;
+  idGuideSource;
+  showingStartTime;
   size;
   sizeGB;
 
@@ -35,11 +40,13 @@ class Program {
   server;
 
   #tivo;
+  #details;
   /**
   * @constructor
   */
   constructor(tivo, details, links, server) {
     this.#tivo = tivo;
+    this.#details = details;
 
     const self = this;
     const addDetail = (m,d, cb=d=>d) => {
@@ -60,14 +67,29 @@ class Program {
     addDetail('sourceStation', 'SourceStation');
     addDetail('sourceChannel', 'SourceChannel', parseInt);
     addDetail('sourceType', 'SourceType');
-    addDetail('seriesIdString', 'SeriesId');
-    addDetail('programIdString', 'ProgramId');
-    addDetail('seriesId', 'SeriesServerId', parseInt);
-    addDetail('programId', 'ProgramServerId', parseInt);
-    addDetail('id', 'IdGuideSource', parseInt);
+    addDetail('seriesId', 'SeriesId');
+    addDetail('programId', 'ProgramId');
+    addDetail('seriesServerId', 'SeriesServerId', parseInt);
+    addDetail('programServerId', 'ProgramServerId', parseInt);
+    addDetail('idGuideSource', 'IdGuideSource', parseInt);
     addDetail('size', 'SourceSize', parseInt);
+    addDetail('captureDate', 'CaptureDate', data=>parseInt(data, 16));
+    addDetail('showingDuration', 'ShowingDuration', data=>parseInt(data, 16));
+    addDetail('showingStartTime', 'ShowingStartTime', data=>parseInt(data, 16));
 
     this.sizeGB = this.size * 1e-9;
+
+    const hasher = new XXHash64(0x01231234);
+    hasher.update(Buffer.from(this.server.toString()));
+    hasher.update(Buffer.from(this.seriesServerId.toString()));
+    hasher.update(Buffer.from(this.programServerId.toString()));
+    hasher.update(Buffer.from(this.captureDate.toString()));
+    hasher.update(Buffer.from(this.showingStartTime.toString()));
+    hasher.update(Buffer.from(this.sourceChannel.toString()));
+    hasher.update(Buffer.from(this.episodeTitle? this.episodeTitle.toString():'na'));
+    hasher.update(Buffer.from(this.title.toString()));
+
+    this.id = hasher.digest('hex');
 
     this.contentUrl = links.Content[0].Url[0];
     if ('CustomIcon' in links) this.image = links.CustomIcon[0].Url[0]
@@ -87,17 +109,21 @@ class Program {
   }
 
   toString() {
-    let r = `${this.server}: `;
+    let r = '';
     if (this.episodeTitle) {
-      r += `${this.episodeTitle} (${this.title}) ${this.sizeGB.toFixed(2)}GB`
+      r += `${this.episodeTitle} (${this.title})`
     } else {
       r += `${this.title}`
     }
-    r+= ` - ${this.seriesId}:${this.programId}:${this.id}`
+    r+= ` ${this.sizeGB.toFixed(2)}GB - ${this.id}`
     if (this.copyProtected) {
       r += ' (Protected)'
     }
     return r;
+  }
+
+  getDetails() {
+    return this.#details
   }
 }
 

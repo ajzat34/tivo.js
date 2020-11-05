@@ -8,6 +8,7 @@ discovery.on('update', device=>{
   const tivo = device.connect();
 
   tivo.on('data', data=>{
+    // console.log(data.getDetails());
     console.log(data.toString());
     console.log(tivo.unixDecode(data));
   });
