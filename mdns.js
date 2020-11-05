@@ -22,8 +22,8 @@ class TiVoDiscovery {
     this.mak = mak;
   }
 
-  connect(options) {
-    const tivo = new TiVo(this.address, this.mak, this.name, options);
+  connect(options, mak) {
+    const tivo = new TiVo(this.address, mak || this.mak, this.name, options);
     return tivo;
   }
 

@@ -19,8 +19,8 @@ class Program {
   sourceType;
   seriesId;
   programId;
-  seriesServerId;
-  programServerId;
+  seriesIdString;
+  programIdString;
   size;
   sizeGB;
 
