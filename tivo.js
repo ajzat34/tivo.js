@@ -195,6 +195,8 @@ class TiVo extends EventEmitter {
       // get the number of shows loaded
       const size = parseInt(next.TiVoContainer.ItemCount[0]);
 
+      this.emit('batch', first, total);
+
       // loop over every show loaded
       let i = 0;
       for (const program of next.TiVoContainer.Item) {
