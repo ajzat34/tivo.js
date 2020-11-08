@@ -196,12 +196,14 @@ class TiVo extends EventEmitter {
       const size = parseInt(next.TiVoContainer.ItemCount[0]);
 
       // loop over every show loaded
+      const i = 0;
       for (const program of next.TiVoContainer.Item) {
         const details = program.Details[0];
         const links = program.Links[0];
         const data = new Program(this, details, links, this.name);
-        this.emit('data', data);
-      }
+        this.emit('data', data, first+i, totalItems);
+        i++;
+      };
 
       // get ready for the next set
       offset += size;
