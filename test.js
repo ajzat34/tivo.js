@@ -14,7 +14,7 @@ discovery.on('update', device=>{
   tivo.on('data', data=>{
     // console.log(data.getDetails());
     console.log(data.toString());
-    console.log(tivo.unixDecode(data));
+    console.log(data.unixDecode());
   });
   tivo.scan();
 })

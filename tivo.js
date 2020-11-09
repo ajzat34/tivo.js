@@ -132,6 +132,10 @@ class Program {
   getDetails() {
     return this.#details
   }
+
+  unixDecode() {
+    return this.#tivo.unixDecode(this);
+  }
 }
 
 class TiVo extends EventEmitter {
