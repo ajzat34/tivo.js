@@ -5,6 +5,13 @@ var {XXHash64} = require('xxhash');
 
 const TiVoRequest = require('./http.js');
 const TiVoDecoder = require('./tivodecode.js');
+
+function cleanFileName(str) {
+  return str
+  .replace(/[ =\\/()\[\]]/g, '_')
+  .replace(/[ !@#$%^&*/<>+:|?]/g, '-')
+}
+
 /**
 * A show/movie recored on the tivo
 */
@@ -98,8 +105,8 @@ class Program {
     this.mpegTS = this.contentUrl + '&Format=video/x-tivo-mpeg-ts';
     this.mpegPS = this.contentUrl + '&Format=video/x-tivo-mpeg';
 
-    const fileTitle = this.title.replace(/ /g, '_').replace(/:/g, '');
-    const episodeTitle = this.episodeTitle? this.episodeTitle.replace(/ /g, '_').replace(/:/g, ''):'';
+    const fileTitle = cleanFileName(this.title);
+    const episodeTitle = this.episodeTitle? cleanFileName(this.episodeTitle):'';
 
     if (this.episodeTitle) {
       this.fileName = `${fileTitle}-${episodeTitle}`
