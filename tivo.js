@@ -9,7 +9,7 @@ const TiVoDecoder = require('./tivodecode.js');
 function cleanFileName(str) {
   return str
   .replace(/[ =\\/()\[\]]/g, '_')
-  .replace(/[ !@#$%^&*/<>+:|?]/g, '-')
+  .replace(/[ !@#$%^&*/<>+:;|?]/g, '-')
 }
 
 /**
