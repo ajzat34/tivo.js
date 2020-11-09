@@ -22,7 +22,7 @@ class TiVoRequest extends EventEmitter {
   }
 
   unixScript() {
-    return `${this.curl} --digest -u ${this.username}:${this.password} -H "Cache-Control: max-age=0" -c ${path.resolve(__dirname, 'cookiejar')}`;
+    return `${this.curl} -sS --digest -u ${this.username}:${this.password} -H "Cache-Control: max-age=0" -c ${path.resolve(__dirname, 'cookiejar')}`;
   }
 
   async get(url) {
