@@ -4,7 +4,7 @@ Get metadata and download links from your TiVo
 # Install
 ### Dependencies:
  * `cURL`
- * `Tivodecode-ng` or `Tivodecode` https://github.com/wmcbrine/tivodecode-ng. Note: You don't actually need tivodecode, but you can genorate commands that use it
+ * `Tivodecode-ng` or `Tivodecode` https://github.com/wmcbrine/tivodecode-ng. Required to decode files.
 ### NPM/Yarn:
 ```shell
 $ npm install ajzat34/tivo.js
